@@ -11,7 +11,8 @@ import QrRouter from "./routers/qrRouter.js"
 
 const app=express()
 dottenv.config()
-let dburl=process.env.DBURL+process.env.DBNAME
+let dburl=process.env.DBURL
+
 
 dbConnect(dburl)
 //app.use(cors())
