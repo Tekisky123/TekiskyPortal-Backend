@@ -1,5 +1,4 @@
 import studentModel from "../models/studentModel.js";
-import status from 'http-status';
 
 const createStudent = async (req, res) => {
     console.log(req.body);
@@ -16,6 +15,7 @@ const createStudent = async (req, res) => {
 const getAllStudents = async (req, res) => {
     try {
         const students = await studentModel.find();
+        console.log(students);
 
         if (students.length === 0) {
             return res.status(404).json({
