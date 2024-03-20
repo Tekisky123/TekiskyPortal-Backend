@@ -7,11 +7,12 @@ import userRouter from "./routers/userRouter.js"
 import cors from 'cors'
 import enquiryRouter from "./routers/enquiryRouter.js"
 import morgan from "morgan"
+import QrRouter from "./routers/qrRouter.js"
 
 const app=express()
 dottenv.config()
-let dburl=process.env.DBURL
-let dbname=process.env.DBNAME
+let dburl=process.env.DBURL+process.env.DBNAME
+
 dbConnect(dburl)
 //app.use(cors())
  const corsOptions = {
@@ -35,6 +36,7 @@ const port =process.env.PORT
  app.use("/student",studentRouter)
  app.use("/user",userRouter)
  app.use("/enquiry",enquiryRouter)
+ app.use('/qr', QrRouter); 
  
 
 app.listen(port,()=>{

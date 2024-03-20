@@ -49,14 +49,18 @@ const educationalSchema = new mongoose.Schema({
   },
 });
 
-// Define the Main schema
-// combines the previously defined schemas to create a main schema for a patient
+const attendanceSchema = new mongoose.Schema({
+  date: { type: Date, default: Date.now }, 
+  present: { type: Boolean, default: false }, 
+});
+
 
 const studentSchema = new mongoose.Schema({
   courseDetails: { type: courseDetailsSchema},
   personalDetails:{type:personalDetailSchema},
   contactDetails: { type: contactDetailSchema },
-  educationalDetails: { type: [educationalSchema] },                                   
+  educationalDetails: { type: [educationalSchema] }, 
+  attandanceDetails: { type:[attendanceSchema]}                                  
 });
 
 

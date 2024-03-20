@@ -1,134 +1,127 @@
-import studentModel from "../models/studentModel.js"
-import status from 'http-status'
-
-
+import studentModel from "../models/studentModel.js";
+import status from 'http-status';
 
 const createStudent = async (req, res) => {
-   
-    console.log(req.body)
-    const newStudent=new studentModel(req.body);
+    console.log(req.body);
+    const newStudent = new studentModel(req.body);
     
     try {
-        const saveStudent=await newStudent.save();
-        res.status(201).json(saveStudent);
-        
+        const savedStudent = await newStudent.save();
+        res.status(201).json(savedStudent);
     } catch (error) {
-        res.status(400).json({message:error.message});  
+        res.status(400).json({ message: error.message });  
     }
-}
+};
 
-
-
-
-const getStudent=async(req,res)=>{
-    // res.sendFile(path.join(process.cwd(),'views','index.html'))
+const getAllStudents = async (req, res) => {
     try {
-        const result = await studentModel.find();
+        const students = await studentModel.find();
 
-        if (result.length === 0) {
+        if (students.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: 'No Students Found?!',
+                message: 'No Students Found',
             });
         }
 
         return res.status(200).json({
-            
             success: true,
-            result,
+            result: students,
         });
     } catch (error) {
         return res.status(400).json({
             success: false,
-            message: "Error While Displaying Students?!",
+            message: 'Error while fetching students',
             error: error.message,
         });
     }
 };
 
-
-// const getStudent=async(req,res)=>{
-//     const studentId=req.params.id;
-//     try {
-//         const student=await getStudentService(studentId);
-//         res.json(student)
-//     } catch (error) {
-//         res.status(500).json({message:err.message})
-//     }
-// }
-
-const deleteStudent=async(req,res)=>{
-    const _id=req.params.id
-    const data=await studentModel.findByIdAndDelete(_id)
-    if(!data){
-        return res.status(status.NOT_FOUND).json({
-            success:false,
-            message:"Invalid Id ?!"
-        })
-    }
-    res.json({
-        success:true,
-        message:"Student Deleted Successfully...!"
-    })
-}
-
-const updateStudent=async(req,res)=>{
+const deleteStudent = async (req, res) => {
+    const _id = req.params.id;
     try {
-        const _id = req.params.id;
-        console.log(_id);
-
-        const student = await studentModel.findByIdAndUpdate(_id, req.body, { new: true });  
-         //req.body typically contains the updated information sent in the request body...!
-        //This option specifies that the method should return the modified document rather than the original one.
-        // When new is set to true, 
-        //the student variable will be assigned the updated document after the update operation is completed.
-
-        if (!student) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid Id?!",
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: "Student Record Updated Successfully...!",
-            student,
-        });
-    } catch (error) {
-        return res.status(400).json({
-            success: false,
-            message: "Error While Updating Record?!",
-            error: error.message,
-        });
-    }
-}
-
-const getOneStudent=async(req,res)=>{
-    try {
-         const _id = req.params.id;
-        const result = await studentModel.findById(_id);
-
-       // if (result.length === 0) {
-        if(!result){
+        const deletedStudent = await studentModel.findByIdAndDelete(_id);
+        if (!deletedStudent) {
             return res.status(404).json({
                 success: false,
-                message: 'No Student Found?!',
+                message: 'Invalid Student ID',
             });
         }
-
-        return res.status(200).json({
-            
+        res.json({
             success: true,
-            result,
+            message: 'Student Deleted Successfully',
         });
     } catch (error) {
-        return res.status(400).json({
+        res.status(500).json({
             success: false,
-            message: "Error While Displaying Student?!",
+            message: 'Error deleting student',
             error: error.message,
         });
     }
-}
+};
 
-export {createStudent,getStudent,deleteStudent,updateStudent,getOneStudent}
+const updateStudent = async (req, res) => {
+    const _id = req.params.id;
+    try {
+        const updatedStudent = await studentModel.findByIdAndUpdate(_id, req.body, { new: true });
+        if (!updatedStudent) {
+            return res.status(404).json({
+                success: false,
+                message: 'Invalid Student ID',
+            });
+        }
+        res.json({
+            success: true,
+            message: 'Student Updated Successfully',
+            student: updatedStudent,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error updating student',
+            error: error.message,
+        });
+    }
+};
+
+const getOneStudent = async (req, res) => {
+    const _id = req.params.id;
+    try {
+        const student = await studentModel.findById(_id);
+        if (!student) {
+            return res.status(404).json({
+                success: false,
+                message: 'Student not found',
+            });
+        }
+        res.json({
+            success: true,
+            student: student,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error getting student',
+            error: error.message,
+        });
+    }
+};
+
+const updateAttendance = async (studentId) => {
+    try {
+        const student = await studentModel.findById(studentId);
+        if (!student) {
+            console.log('Student not found');
+            return;
+        }
+        // Update attendance record for the student
+        // For example, you can add a new attendance record for the current date
+        student.attendance.push({ date: new Date(), present: true });
+        await student.save();
+        console.log('Attendance updated for student:', studentId);
+    } catch (error) {
+        console.error('Error updating attendance:', error.message);
+    }
+};
+
+export { createStudent, getAllStudents, deleteStudent, updateStudent, updateAttendance,getOneStudent };
