@@ -12,7 +12,10 @@ let createUser=async(req,res)=>{
        if (status=='success'){
         let token=await getToken(email)
         res.status(200).send('success')
-       }else{
+       }else if(status=='false'){
+        res.status(404).send('user exist');
+       }
+       else{
         res.status(501).send('error')
        }
     } catch (error) {
@@ -57,8 +60,12 @@ let updateUsers=async(req,res)=>{
    }
 };
 
+
+
+
 let getUser=async(req,res)=>{
     try {
+        // console.log(req.user);
         const data=await userModel.find()
 
         if(!data) return res.status(404).json({

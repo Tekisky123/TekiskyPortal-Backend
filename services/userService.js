@@ -2,6 +2,10 @@ import userModel from "../models/userModel.js";
 
 let registerUserService=async(userName,mobileNumber,email,password,userType)=>{
     try {
+        const existingUser =  await userModel.findOne({mobileNumber});
+        if(existingUser){
+            return "false"
+        }
         let user=new userModel({userName,mobileNumber,email,password,userType});
         await user.save();
         return "success"

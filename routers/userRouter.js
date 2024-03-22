@@ -6,7 +6,7 @@ userRouter.post('/create',createUser);
 userRouter.post('/login',login);
 userRouter.post('update/:id',updateUsers);
 userRouter.get('/getuser',getUser);
-userRouter.get('delete/:id',deleteUser);
+userRouter.get('/delete/:id',deleteUser);
 userRouter.get('/getOneUser/:id',getOneUser)
 
 

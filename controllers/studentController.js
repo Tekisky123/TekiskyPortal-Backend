@@ -14,12 +14,13 @@ const createStudent = async (req, res) => {
 
 const getAllStudents = async (req, res) => {
     try {
+        console.log("req user" , req.user);
         const students = await studentModel.find();
         console.log(students);
 
         if (students.length === 0) {
             return res.status(404).json({
-                success: false,
+                success: false, 
                 message: 'No Students Found',
             });
         }
