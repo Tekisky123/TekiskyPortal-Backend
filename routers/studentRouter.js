@@ -4,8 +4,8 @@ import {createStudent,getAllStudents,deleteStudent,updateStudent,getOneStudent} 
 
 studentRouter.post('/create',createStudent)
 studentRouter.get('/getstudent',getAllStudents)
-studentRouter.put('/:id',updateStudent)
-studentRouter.get('/:id',deleteStudent)
+studentRouter.put('/edit/:id',updateStudent)
+studentRouter.get('/delete/:id',deleteStudent)
 studentRouter.get('/getOneStudent/:id',getOneStudent)
 
 

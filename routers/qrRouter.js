@@ -1,8 +1,9 @@
 import express from 'express';
-import { generateQR } from '../controllers/generateQRController.js';
+import { generateQR, scanQR } from '../controllers/generateQRController.js';
 
 const QrRouter = express.Router();
 
-QrRouter.post('/generate', generateQR);
+QrRouter.get('/generate', generateQR);
+QrRouter.post('/scan', scanQR);
 
 export default QrRouter;
